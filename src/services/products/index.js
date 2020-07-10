@@ -20,30 +20,28 @@ const readFile = (fileName) => {
 }
 
 
-// router.use(multer({dest: "../../public/img", rename: function(){}}))
-router.post("/:id/upload", upload.single("avatar"), async (req, res, next) => {
+
+router.post("/:id/upload", upload.single("product"), async (req, res, next) => {
   
   console.log(req.file.buffer)
   try {
-    //const productsDB = await productchema.
+    await fs.writeFile(path.join(imagePath, `${req.params.id}.jpg`), req.file.buffer)
     
-  //   const newDb = productsDB.map((x) => {
-  //     if(x.productId === req.params.productId){
-  //         x.image = `http://localhost:${port}/image/products/${req.params._id}.jpg`
-  //     }
-  //     return x;
-  // })
-
-  //   fs.writeFileSync(path.join(__dirname, "products.json"), JSON.stringify(newDb))
-
-  //   await writeFile(
-  //     join(productsFolderPath, `${req.params._id}.jpg`),
-  //     req.file.buffer
-  //   )
+    req.body = {
+      imageUrl: `http://127.0.0.1:${port}/img/products/${req.params.id}.jpg`
+    }
+    const product = await ProductModel.findByIdAndUpdate(req.params.id, req.body)
+    if (product) {
+      res.send("Record updated!")
+    } else {
+      const error = new Error(`Product with id ${req.params.id} not found`)
+      error.httpStatusCode = 404
+      next(error)
+    }
+    
   } catch (error) {
-    console.log(error)
+    next(error)
   }
-  res.send("ok")
 })
 
 router.get("/", async(req, res, next) => {
