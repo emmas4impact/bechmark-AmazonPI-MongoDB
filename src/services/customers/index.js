@@ -105,7 +105,7 @@ customerRoute.post("/:id/add-to-cart/:productId", async (req, res, next) => {
   
   customerRoute.delete("/:id/remove-from-cart/:productId", async (req, res, next) => {
     try {
-      await CustomerSchema.removeProductFromCart(req.params.id, req.params.productId)
+      await customerModel.removeProductFromCart(req.params.id, req.params.productId)
       res.send("Ok")
     } catch (error) {
       next(error)
@@ -114,8 +114,8 @@ customerRoute.post("/:id/add-to-cart/:productId", async (req, res, next) => {
   
   customerRoute.get("/:id/calculate-cart-total", async (req, res, next) => {
     try {
-      const total = await CustomerSchema.calculateCartTotal(req.params.id)
-      res.send({ total })
+      const total = await customerModel.calculateCartTotal(req.params.id)
+      res.send({total})
     } catch (error) {
       next(error)
     }
