@@ -51,7 +51,7 @@ router.get("/", async(req, res, next) => {
     .sort(parsedQuery.options.sort)
     .limit(parsedQuery.options.limit).skip(parsedQuery.options.skip)
    
-    res.send({Total_Products: products.length, products})
+    res.send({products, Total: products.length})
   } catch (error) {
     next(error)
   }
