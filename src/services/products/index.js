@@ -5,21 +5,21 @@ const {join} = require("path")
 const multer = require("multer")
 const {writeFile} = require("fs-extra")
 const q2m = require("query-to-mongo")
-
+const port = process.env.PORT
 const productchema = require("./schema");
 const productModel = require("./schema");
 
 
 const router = express.Router()
 const upload = multer({})
-const productsFolderPath =join(__dirname, "../../../public/image/products")
+//const productsFolderPath =join(__dirname, "../../../public/image/products")
 const readFile = (fileName) => {
   const buffer = fs.readFileSync(path.join(__dirname, fileName))
   const fileContent = buffer.toString()
   return JSON.parse(fileContent)
 }
 
-
+const imagePath = path.join(__dirname, "../../../public/img");
 
 router.post("/:id/upload", upload.single("product"), async (req, res, next) => {
   
@@ -28,14 +28,14 @@ router.post("/:id/upload", upload.single("product"), async (req, res, next) => {
     await fs.writeFile(path.join(imagePath, `${req.params.id}.jpg`), req.file.buffer)
     
     req.body = {
-      imageUrl: `http://127.0.0.1:${port}/img/products/${req.params.id}.jpg`
+      imageUrl: `http://127.0.0.1:${port}/img/${req.params.id}.jpg`
     }
-    const product = await ProductModel.findByIdAndUpdate(req.params.id, req.body)
-    if (product) {
-      res.send("Record updated!")
-    } else {
-      const error = new Error(`Product with id ${req.params.id} not found`)
-      error.httpStatusCode = 404
+    const product = await productchema.findByIdAndUpdate(req.params.id, req.body)
+    if(product){
+      res.status(204).send(product)
+    }else{
+      const error = new Error(`user with id ${req.params.id} not found`);
+      error.httpStatusCode=404
       next(error)
     }
     
