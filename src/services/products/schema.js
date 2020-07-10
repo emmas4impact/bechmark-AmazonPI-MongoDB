@@ -47,9 +47,7 @@ const productSchema = new Schema({
     type: String,
     required: true,
   },
-  createdAt: {type: Date, default: Date.now},
-  updatedAt: {type: Date,},
-  
+ 
   reviews: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'reviews',
        
@@ -64,8 +62,8 @@ const productSchema = new Schema({
     next();
   });
   productSchema.static("productReview", async function(productId){
-    const projects  = await productModel.find({_id: productId}).populate("reviews");
-    return projects;
+    const product = await productModel.findOne({_id: productId}).populate("reviews");
+    return  product ;
 });
 
   productSchema.post("validate", function (error, doc, next) {
