@@ -33,7 +33,7 @@ CustomerSchema.static("findProductInCart", async function (id, productId) {
       _id: id,
       "cart._id":productId,
     })
-    return isProductThere
+    return isProductThere;
   })
   
   CustomerSchema.static("incrementCartQuantity", async function (
