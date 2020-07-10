@@ -6,10 +6,13 @@ const ProductCartSchema = new Schema({
   _id: String,
   name: String,
   description: String,
-  year: Number,
-  brand: Array,
+  brand: String,
   price: Number,
-  authors: [{ _id: Schema.Types.ObjectId, name: String, surname: String }],
+  imageUrl: String,
+  category: String,
+  createdAt:Date,
+  updatedAt: Date,
+  reviews: [{ _id: Schema.Types.ObjectId, comment: String, rate: Number, createdAt:Date }],
   quantity: Number,
 })
 const productSchema = new Schema({
@@ -28,7 +31,7 @@ const productSchema = new Schema({
      
     },
     imageUrl: {
-        data: Buffer, contentType: String,
+        type: String
         
     },
     price: {
@@ -60,8 +63,8 @@ const productSchema = new Schema({
     this.updatedAt=Date.now();
     next();
   });
-  productSchema.static("productReview", async function(id){
-    const projects  = await productModel.find({_id: id}).populate("reviews");
+  productSchema.static("productReview", async function(productId){
+    const projects  = await productModel.find({_id: productId}).populate("reviews");
     return projects;
 });
 
