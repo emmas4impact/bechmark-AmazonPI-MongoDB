@@ -68,7 +68,7 @@ CustomerSchema.static("findProductInCart", async function (id, productId) {
   CustomerSchema.static("calculateCartTotal", async function (id) {
     const { cart } = await customerModel.findById(id)
     return cart
-      .map((product) =>product.price *product.quantity)
+      .map((product) =>product.price * product.quantity)
       .reduce((acc, el) => acc + el, 0)
   })
 
