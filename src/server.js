@@ -2,6 +2,7 @@ const express = require("express")
 const listEndpoints = require("express-list-endpoints")
 const productRouter = require("./services/products");
 const reviewRouter = require("./services/reviews")
+const customerRouter = require("./services/customers")
 
 const mongoose = require("mongoose")
 
@@ -32,6 +33,7 @@ server.use(loggerMiddleware)
 // ROUTES
 server.use("/products", loggerMiddleware, productRouter)
 server.use("/reviews",loggerMiddleware, reviewRouter )
+server.use("/customers",loggerMiddleware, customerRouter)
 
 // ERROR HANDLERS
 
