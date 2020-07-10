@@ -1,10 +1,5 @@
 const express = require("express");
-const fs = require("fs");
-const path = require("path")
-const {join} = require("path")
-const multer = require("multer")
-const {writeFile} = require("fs-extra")
-const q2m = require("query-to-mongo")
+
 const customerRoute = express.Router();
 const CustomerSchema = require("./schema");
 const customerModel = require("./schema");
@@ -77,16 +72,17 @@ customerRoute.post("/:id/add-to-cart/:productId", async (req, res, next) => {
     try {
       
       const product = await ProductModel.productReview(req.params.productId)
+      //console.log(product)
       if (product) {
-        const newproduct = { ...product.toObject(), quantity: 1 }
-
-        const isProductThere = await CustomerSchema.findProductInCart(
+          const newProduct ={...product.toObject(), quantity: 1}
+        console.log(newProduct)
+        const isProductAvailable= await customerModel.findProductInCart(
           req.params.id,
           req.params.productId
         )
-        if (isProductThere) {
+        if (isProductAvailable) {
          
-          await CustomerSchema.incrementCartQuantity(
+          await customerModel.incrementCartQuantity(
             req.params.id,
             req.params.productId,
             1
@@ -94,7 +90,7 @@ customerRoute.post("/:id/add-to-cart/:productId", async (req, res, next) => {
           res.send("Quantity incremented")
         } else {
           // the product is not in the cart
-          await customerModel.addProductToCart(req.params.id, newproduct)
+          await customerModel.addProductToCart(req.params.id, newProduct)
           res.send("New product added!")
         }
       } else {
