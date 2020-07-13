@@ -111,6 +111,14 @@ customerRoute.post("/:id/add-to-cart/:productId", async (req, res, next) => {
       next(error)
     }
   })
+  customerRoute.delete("/:id/check-out-cart/", async (req, res, next) => {
+    try {
+      await customerModel.checkProductFromCart(req.params.id)
+      res.send("Ok")
+    } catch (error) {
+      next(error)
+    }
+  })
   
   customerRoute.get("/:id/calculate-cart-total", async (req, res, next) => {
     try {
