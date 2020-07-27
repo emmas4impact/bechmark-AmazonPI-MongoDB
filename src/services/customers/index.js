@@ -6,7 +6,7 @@ const customerModel = require("./schema");
 const ProductModel = require("../products/schema")
 
 customerRoute.get("/", async(req, res, next)=>{
-    const customers = await CustomerSchema.find(req.query)
+    const customers = await customerModel.find(req.query)
     
     res.send({data:customers, Total: customers.length})
     
