@@ -25,12 +25,13 @@ router.post("/:id/upload", upload.single("product"), async (req, res, next) => {
   
   console.log(req.file.buffer)
   try {
-    await fs.writeFile(path.join(imagePath, `${req.params.id}.jpg`), req.file.buffer)
+    fs.writeFile(join(imagePath, `${req.params.id}.jpg`), req.file.buffer)
     
     req.body = {
       imageUrl: `http://127.0.0.1:${port}/img/${req.params.id}.jpg`
     }
-    const product = await productchema.findByIdAndUpdate(req.params.id, req.body)
+    const product = await productModel.findByIdAndUpdate(req.params.id, req.body)
+    console.log(product)
     if(product){
       res.status(204).send(product)
     }else{
